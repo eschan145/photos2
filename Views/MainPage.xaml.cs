@@ -2,13 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
-
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media.Imaging;
-
 using WinRT.Interop;
-
 using ImageMagick;
 
 enum DataType
@@ -28,8 +25,12 @@ namespace photos.Views
         public MainPage()
         {
             this.InitializeComponent();
+        }
 
-            string path = @"test.jpg";
+        public void OpenImage()
+        {
+            string path = "test.jpg";
+
             Dictionary<string, string> metadata = ExtractMetadata(path);
             metadata.TryGetValue("XPTitle", out var title);
 
@@ -96,7 +97,7 @@ namespace photos.Views
                           exif.GetValue(ExifTag.DateTime) ??
                           exif.GetValue(ExifTag.DateTimeDigitized);
 
-            string dateString = dateTag.Value;
+            string dateString = dateTag.Value ?? "";
             string date = "";
 
             if (DateTime.TryParseExact(dateString, "yyyy:MM:dd HH:mm:ss",

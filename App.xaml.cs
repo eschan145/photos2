@@ -1,51 +1,45 @@
-using Microsoft.UI.Xaml.Navigation;
+using System;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using Microsoft.UI.Xaml;
 
 namespace photos
 {
-    /// <summary>
-    /// Provides application-specific behavior to supplement the default Application class.
-    /// </summary>
     public partial class App : Application
     {
-        private Window window = Window.Current;
+        [DllImport("kernel32.dll")]
+        static extern bool AllocConsole();
 
-        /// <summary>
-        /// Initializes the singleton application object.  This is the first line of authored code
-        /// executed, and as such is the logical equivalent of main() or WinMain().
-        /// </summary>
+        public Window window;
+
         public App()
         {
             this.InitializeComponent();
+
+            AllocConsole();
+
+            this.UnhandledException += App_UnhandledException;
+
+            AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
+            {
+                Console.WriteLine($"AppDomain Unhandled Exception: {e.ExceptionObject}");
+                Console.WriteLine("Press Enter to close...");
+                Console.ReadLine();
+            };
         }
 
-        /// <summary>
-        /// Invoked when the application is launched normally by the end user.  Other entry points
-        /// will be used such as when the application is launched to open a specific file.
-        /// </summary>
-        /// <param name="e">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected override void OnLaunched(LaunchActivatedEventArgs args)
         {
-            window ??= new Window();
-
-            if (window.Content is not Frame rootFrame)
-            {
-                rootFrame = new Frame();
-                rootFrame.NavigationFailed += OnNavigationFailed;
-                window.Content = rootFrame;
-            }
-
-            _ = rootFrame.Navigate(typeof(MainPage), e.Arguments);
+            window = new MainWindow();
             window.Activate();
         }
 
-        /// <summary>
-        /// Invoked when Navigation to a certain page fails
-        /// </summary>
-        /// <param name="sender">The Frame which failed navigation</param>
-        /// <param name="e">Details about the navigation failure</param>
-        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+        private void App_UnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)
         {
-            throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
+            Console.WriteLine($"UI Thread Exception: {e.Exception}");
+            Console.WriteLine("Press Enter to close...");
+            Console.ReadLine();
+            e.Handled = true;
         }
     }
 }

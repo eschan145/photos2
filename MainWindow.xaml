@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window
+    x:Class="photos.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="photos">
+
+    <Frame x:Name="MainFrame" />
+
+</Window>
