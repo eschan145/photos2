@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Page
+    x:Class="photos.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:photos"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+Background="#F3F3F3">
+    <Page.Content>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="Auto" />  <!-- Metadata panel fixed width -->
+            </Grid.ColumnDefinitions>
+
+            <!-- Left Panel: Image + Button -->
+            <StackPanel Grid.Column="0" Margin="10">
+                <Button x:Name="OpenImageButton" Content="Open image" Click="OnCountClicked" Margin="0,0,0,10" />
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <Image x:Name="ImageDisplay" Stretch="Uniform" />
+                </ScrollViewer>
+            </StackPanel>
+
+            <Border Grid.Column="1" Width="340" BorderBrush="#ECECEC" Background="#ffffff" BorderThickness="1" CornerRadius="4" Margin="10,10,10,10">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                  VerticalScrollBarVisibility="Auto">
+        <StackPanel x:Name="MetadataPanel" />
+    </ScrollViewer>
+</Border>
+
+        </Grid>
+    </Page.Content>
+</Page>
