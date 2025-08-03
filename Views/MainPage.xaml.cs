@@ -2,10 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media.Imaging;
+
+using Windows.Storage.Pickers;
 using WinRT.Interop;
+
 using ImageMagick;
 
 enum DataType
@@ -22,15 +26,15 @@ namespace photos.Views
 {
     public partial class MainPage : Page
     {
+        public string filepath {get; set; }
+
         public MainPage()
         {
             this.InitializeComponent();
         }
 
-        public void OpenImage()
+        public void OpenImage(string path)
         {
-            string path = "test.jpg";
-
             Dictionary<string, string> metadata = ExtractMetadata(path);
             metadata.TryGetValue("XPTitle", out var title);
 
@@ -322,6 +326,15 @@ namespace photos.Views
 
         private async void OnCountClicked(object sender, RoutedEventArgs e)
         {
+            FileOpenPicker picker = new FileOpenPicker();
+            picker.FileTypeFilter.Add("*");
+
+            IntPtr hwnd = WindowNative.GetWindowHandle(((App)Application.Current).window);
+            InitializeWithWindow.Initialize(picker, hwnd);
+
+            Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
+            filepath = file.Path;
+            OpenImage(filepath);
         }
     }
 }
